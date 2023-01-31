@@ -8,6 +8,8 @@ var logger = require('morgan');
 //set up router for each set of routes --importing from routes/ folder
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+//we added:
+var blogsRouter = require('./routes/blogs');
 
 //instantiate the actual express app
 // Don't need this because port set to 3000 in bin > www folder:
@@ -30,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public'))); //for hosting static fi
 //we bind (associate) the routers to routes in our application
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/blogs', blogsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
