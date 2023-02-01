@@ -77,9 +77,9 @@ router.get("/single/:blogTitleToGet", (req, res)=>
         success: true,
         foundBlog: foundBlog
     })
-})
+}) 
 
-//Delete Single Blog Title
+//Delete Single Blog Title --DONE
 router.delete("/single/:blogTitleToDelete", (req, res)=>
 {
     const indexOfBlog = sampleBlogs.findIndex((blog)=>
