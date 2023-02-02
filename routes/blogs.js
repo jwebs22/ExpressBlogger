@@ -1,7 +1,9 @@
-var express = require('express');
-const { route } = require('.');
-const app = require('../app');
-var router = express.Router();
+const express = require('express');
+// const { route } = require('.');
+// const app = require('../app');
+const router = express.Router();
+
+const { validateBlogData } = require("../validation/blogs");
 
 const sampleBlogs = [
     {
@@ -46,6 +48,60 @@ const sampleBlogs = [
     },
   ];
 
+//Part 2 assignments
+//POST new blog
+router.post("/create-one", (req, res)=>
+{
+  try {
+    // anticipate fields of our post request /create-one
+    // parse out request data to local constiables
+    const title = req.body.title;
+    const text = req.body.text;
+    const author = req.body.author;
+    const category = req.body.category;
+
+    //create blogData object fields
+    const blogData = {
+      title,
+      text,
+      author,
+      category,
+      createdAt: new Date(),
+      lastModified: new Date(),
+    };
+
+    //pass user data object to our validate function
+    const blogDataCheck = validateBlogData(blogData);
+
+    if (blogDataCheck.isValid === false) {
+			throw Error(blogDataCheck.message)
+      // res.json({
+      //   success: false,
+      //   message: blogCheck.message,
+      // });
+      // return;
+    }
+
+    sampleBlogs.push(blogData)
+
+    console.log("sampleBlogs ", sampleBlogs);
+
+    res.json({
+      success: true,
+    });
+  } catch (e) {
+		// In the catch block, we always want to do 2 things: 
+    //console.log the error and respond with an error object
+    console.log(e);
+    res.json({
+			success: false,
+			error: String(e)
+		});
+  }
+})
+
+
+//Part 1 of Assignment:
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.json({

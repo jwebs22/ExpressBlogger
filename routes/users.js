@@ -1,6 +1,6 @@
 //Original code:
-// var express = require('express');
-// var router = express.Router();
+// const express = require('express');
+// const router = express.Router();
 
 // /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -11,11 +11,15 @@
 
 
 //Dom's code:
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-// This is a named import (require). Since /validation/users.js is exporting a whole object with key/value pairs, the variable value that comes through the import will be that object. The easiest way to access the named functions is to write the key name in an object when you write the import (require) statement like this:
-var { validateUserData } = require("../validation/users");
+// This is a named import (require). 
+//Since /validation/users.js is exporting a whole object with key/value pairs, 
+//the constiable value that comes through the import will be that object. 
+//The easiest way to access the named functions is to write the key name 
+//in an object when you write the import (require) statement like this:
+const { validateUserData } = require("../validation/users");
 
 const userList = [];
 
@@ -39,7 +43,7 @@ router.post("/create-one", (req, res) => {
   try {
 
     // anticipate fields of our post request /create-one
-    // parse out request data to local variables
+    // parse out request data to local constiables
     const email = req.body.email;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
