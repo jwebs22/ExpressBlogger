@@ -1,6 +1,4 @@
 const express = require('express');
-// const { route } = require('.');
-// const app = require('../app');
 const router = express.Router();
 
 const { validateBlogData } = require("../validation/blogs");
@@ -48,57 +46,6 @@ const sampleBlogs = [
     },
   ];
 
-//Part 2 assignments
-//POST new blog
-router.post("/create-one", (req, res)=>
-{
-  try {
-    // anticipate fields of our post request /create-one
-    // parse out request data to local constiables
-    const title = req.body.title;
-    const text = req.body.text;
-    const author = req.body.author;
-    const category = req.body.category;
-
-    //create blogData object fields
-    const blogData = {
-      title,
-      text,
-      author,
-      category,
-      createdAt: new Date(),
-      lastModified: new Date(),
-    };
-
-    //pass user data object to our validate function
-    const blogDataCheck = validateBlogData(blogData);
-
-    if (blogDataCheck.isValid === false) {
-			throw Error(blogDataCheck.message)
-      // res.json({
-      //   success: false,
-      //   message: blogCheck.message,
-      // });
-      // return;
-    }
-
-    sampleBlogs.push(blogData)
-
-    console.log("sampleBlogs ", sampleBlogs);
-
-    res.json({
-      success: true,
-    });
-  } catch (e) {
-		// In the catch block, we always want to do 2 things: 
-    //console.log the error and respond with an error object
-    console.log(e);
-    res.json({
-			success: false,
-			error: String(e)
-		});
-  }
-})
 
 
 //Part 1 of Assignment:
@@ -149,5 +96,141 @@ router.delete("/single/:blogTitleToDelete", (req, res)=>
         success: true
     })
 })
+
+
+//Part 2 assignments
+//POST new blog --DONE
+router.post("/create-one", (req, res)=>
+{
+  try {
+    // anticipate fields of our post request /create-one
+    // parse out request data to local constiables
+    const title = req.body.title;
+    const text = req.body.text;
+    const author = req.body.author;
+    const category = req.body.category;
+
+    //create blogData object fields
+    const blogData = {
+      title,
+      text,
+      author,
+      category,
+      createdAt: new Date(),
+      lastModified: new Date(),
+    };
+
+    //pass blog data object to our validate function
+    const blogDataCheck = validateBlogData(blogData);
+
+    if (blogDataCheck.isValid === false) {
+			throw Error(blogDataCheck.message)
+      // res.json({
+      //   success: false,
+      //   message: blogCheck.message,
+      // });
+      // return;
+    }
+
+    sampleBlogs.push(blogData)
+
+    console.log("sampleBlogs ", sampleBlogs);
+
+    res.json({
+      success: true,
+    });
+  } catch (e) {
+		// In the catch block, we always want to do 2 things: 
+    //console.log the error and respond with an error object
+    console.log(e);
+    res.json({
+			success: false,
+			error: String(e)
+		});
+  }
+})
+
+
+//PUT Update a blog --DONE
+router.put("/update-one/:blogToUpdate", (req, res)=>
+{
+  const blogToFind = req.params.blogToUpdate
+
+  const originalBlog = sampleBlogs.find((blog)=>{
+    return blog.title === blogToFind
+  })
+
+  if (!originalBlog) {
+    res.json({
+      success: false,
+      message: "Could not find blog in blog list"
+    })
+    return
+  }
+
+  try
+  {
+
+  const updatedBlog = {}
+
+  if (req.body.title !== undefined){
+    updatedBlog.title = req.body.title
+  } else {
+    updatedBlog.title = originalBlog.title
+  }
+
+  if (req.body.text !== undefined){
+    updatedBlog.text = req.body.text
+  } else {
+    updatedBlog.text = originalBlog.text
+  }
+
+  if (req.body.author !== undefined){
+    updatedBlog.author = req.body.author
+  } else {
+    updatedBlog.author = originalBlog.author
+  }
+
+  if (req.body.category !== undefined){
+    updatedBlog.category = req.body.category
+  } else {
+    updatedBlog.category = originalBlog.category
+  }
+
+  updatedBlog.createdAt = new Date()
+  updatedBlog.lastModified = new Date()
+
+  //pass blog data object to our validate function
+  const blogDataCheck = validateBlogData(updatedBlog);
+
+  if (blogDataCheck.isValid === false) {
+    throw Error(blogDataCheck.message)
+  }
+
+  sampleBlogs.forEach((blog, index)=>
+  {
+      if (blog.title === blogToFind)
+      {
+          sampleBlogs[index] = updatedBlog
+      }
+  })
+
+  console.log(updatedBlog)
+
+  res.json({
+    success: true
+  })
+} catch (e) {
+  // In the catch block, we always want to do 2 things: 
+  //console.log the error and respond with an error object
+  console.log(e);
+  res.json({
+    success: false,
+    error: String(e)
+  });
+}
+
+})
+
 
 module.exports = router;
