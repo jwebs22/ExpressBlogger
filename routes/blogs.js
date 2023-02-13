@@ -32,7 +32,7 @@ router.get('/get-one', async function(req, res, next) {
 
   const blogs = await db()
     .collection('sample_blogs')
-    //gets first one:
+    // gets first one:
     // .find({})
     // .limit(1)
     //gets random:
@@ -81,7 +81,7 @@ router.get("/get-one/:blogTitleToGet", async function(req, res, next)
       success: true,
       foundBlog: foundBlog
   })
-}) 
+})
 
 //Delete Single Blog Title using MongoDB --DONE
 router.delete("/single/:blogTitleToDelete", async function (req, res)
