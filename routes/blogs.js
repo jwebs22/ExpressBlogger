@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { v4: uuidv4 } = require("uuid");
 
 const { validateBlogData } = require("../validation/blogs");
 
@@ -121,6 +122,7 @@ router.post("/create-one", async function(req, res, next)
     const newBlog = await db()
     .collection("sample_blogs")
     .insertOne({
+      id: uuidv4(),
       title,
       text,
       author,
