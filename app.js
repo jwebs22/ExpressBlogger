@@ -19,7 +19,7 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'jade');
 
 //set up logger and cookie parser 
 app.use(logger('dev'));
@@ -49,7 +49,15 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  // res.render('error');
 });
+
+// //if bin file missing:
+// //add this at the top:
+// const PORT = process.env.PORT || 5002;
+// //And this here:
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port: ${PORT}`);
+// })
 
 module.exports = app;
