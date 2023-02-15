@@ -2,19 +2,14 @@ const { v4: uuidv4 } = require("uuid");
 var express = require("express");
 var router = express.Router();
 
-const Blog = require('../models/Blogs');
 
-/* GET home page. */
-router.get('/all', async function(req, res) {
+const blogsController = require('../controllers/blogsController');
 
-    //query blogs 
-    try {
-      const allBlogs = await Blog.find({});
-      res.json({blogs: allBlogs });
-    }catch(e){
-      console.log(e);
-    }
-});
+// GET All Blog Posts
+router.get('/all',blogsController.getAllBlogs);
+
+// POST new Blog Post
+router.post("/create-one", blogsController.createOneBlog);
 
 // // router.get("/get-one-example", async function (req, res, next) {
 // //   const blogPosts = await db()
@@ -64,43 +59,6 @@ router.get('/all', async function(req, res) {
 // //   // so we add it in our res.json()
 // //   console.log("third");
 // // });
-
-router.post("/create-one", async function (req, res, next) {
-  try {
-    //parse out fields from POST request
-    const title  = req.body.title 
-    const text = req.body.text 
-    const author = req.body.author
-    const categories = req.body.category
-    const year =  req.body.year;
-
-    //pass fields to new Blog model 
-    //notice how it's way more organized and does the type checking for us
-    const newBlog = new Blog({
-        title,
-        text,
-        author,
-        categories,
-        year
-    });
-
-    //save our new entry to the database 
-    const savedData =  await newBlog.save();
-    
-    //return the successful request to the user 
-    res.json({
-        success: true,
-        blogs: savedData
-    });
-
-  } catch (e) {
-    console.log(typeof e);
-    console.log(e);
-    res.json({
-      error: e.toString(),
-    });
-  }
-});
 
 // // router.get("/get-multi", async function (req, res) {
 // //   const sortField = req.query.sortField;
